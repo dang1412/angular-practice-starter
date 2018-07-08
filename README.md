@@ -1,6 +1,6 @@
-# AngularPracticeStarter
+# Angular Best Practice Starter
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Development server
 
@@ -9,6 +9,14 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+Generate module, page components (associated directly with a route), presentation components (used in page components with input, output)
+
+```
+ng g module feature-modules/feature-awesome
+ng g component feature-modules/feature-awesome/pages/my-page
+ng g component feature-modules/feature-awesome/components/first-component
+``` 
 
 ## Build
 
