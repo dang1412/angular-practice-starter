@@ -15,6 +15,18 @@ This project was originally generated with [Angular CLI](https://github.com/angu
 
 Inside a feature module we may have a single component or have the whole structure same to its parent app module
 
+## Some explanations
+
+### Add material
+ - Include font style `src/index.html`
+```
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+```
+ - Include prebuilt theme style `src/styles.scss`
+```
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -27,8 +39,8 @@ Generate module, page components (associated directly with a route), presentatio
 
 ```
 ng g module feature-modules/feature-awesome
-ng g component feature-modules/feature-awesome/pages/my-page
-ng g component feature-modules/feature-awesome/components/first-component
+ng g component feature-modules/feature-awesome/pages/my-page --skip-import
+ng g component feature-modules/feature-awesome/components/first-component --skip-import
 ``` 
 
 ## Build

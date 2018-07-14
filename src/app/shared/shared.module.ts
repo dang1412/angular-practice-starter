@@ -6,11 +6,13 @@ import { RouterModule } from '@angular/router';
 import { SharedPipes } from './pipes';
 import { SharedComponents } from './components';
 import { SharedDirectives } from './directives';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    MaterialModule,
     RouterModule,
   ],
   declarations: [
@@ -20,6 +22,7 @@ import { SharedDirectives } from './directives';
   exports: [
     CommonModule,
     FormsModule,
+    MaterialModule,
     RouterModule,
     ...SharedComponents,
     ...SharedPipes,
