@@ -8,12 +8,12 @@ import { FeatureAwesomeComponents } from './components';
 import { FeatureAwesomePages } from './pages';
 
 // routing
-import { FeatureAwesomeRouting } from './feature-awesome.routing';
+import { FeatureAwesomeRoutingModule } from './feature-awesome-routing.module';
 
 @NgModule({
   imports: [
     SharedModule,
-    FeatureAwesomeRouting,
+    FeatureAwesomeRoutingModule,
   ],
   declarations: [
     ...FeatureAwesomePages,
