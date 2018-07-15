@@ -6,6 +6,10 @@ const appRoutes: Routes = [
     path: '',
     loadChildren: './feature-modules/feature-awesome/feature-awesome.module#FeatureAwesomeModule'
   },
+  {
+    path: 'ccex-api',
+    loadChildren: './feature-modules/ccex-api/ccex-api.module#CcexApiModule'
+  },
 ];
 
 @NgModule({
