@@ -4,6 +4,9 @@ import { SharedModule } from '../../shared/shared.module';
 // pages
 import { CcexApiPages } from './pages';
 
+// components
+import { CcexApiComponents } from './components';
+
 // routing
 import { CcexApiRoutingModule } from './ccex-api-routing.module';
 
@@ -14,6 +17,7 @@ import { CcexApiRoutingModule } from './ccex-api-routing.module';
   ],
   declarations: [
     ...CcexApiPages,
+    ...CcexApiComponents,
   ],
 })
 export class CcexApiModule { }

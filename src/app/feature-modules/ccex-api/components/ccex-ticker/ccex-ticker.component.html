@@ -1,0 +1,20 @@
+<table *ngIf="ticker">
+  <tr>
+    <th>Price ({{ ticker.change24Perc }})</th>
+    <td>{{ ticker.last }}</td>
+    <th>Volume</th>
+    <td>{{ ticker.vol }}</td>
+  </tr>
+  <tr>
+    <th>Bid</th>
+    <td>{{ ticker.bid }}</td>
+    <th>Ask</th>
+    <td>{{ ticker.ask }}</td>
+  </tr>
+  <tr>
+    <th>Low</th>
+    <td>{{ ticker.low }}</td>
+    <th>High</th>
+    <td>{{ ticker.high }}</td>
+  </tr>
+</table>

@@ -1,0 +1,17 @@
+<div class="orderbook-wrapper" *ngIf="orderbook">
+
+  <table class="orderbook-table">
+    <tr *ngFor="let bid of orderbook.bids">
+      <td>{{ bid[0] }}</td>
+      <td>{{ bid[1] }}</td>
+    </tr>
+  </table>
+
+  <table class="orderbook-table">
+    <tr *ngFor="let ask of orderbook.asks">
+      <td>{{ ask[0] }}</td>
+      <td>{{ ask[1] }}</td>
+    </tr>
+  </table>
+
+</div>

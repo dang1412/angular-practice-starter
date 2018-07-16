@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Ticker, Orderbook } from 'ccex-api/exchanges/exchange-types';
-import { BinanceApi } from 'ccex-api/exchanges/binance';
+import { BitfinexApi } from 'ccex-api/exchanges/bitfinex';
 
 @Component({
   selector: 'app-ccex-page',
@@ -16,9 +16,9 @@ export class CcexPageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    const binanceApi = new BinanceApi({ corsProxy: 'https://cors-anywhere.herokuapp.com/' });
-    this.ticker$ = binanceApi.fetchTicker$('btc_usdt');
-    this.orderbook$ = binanceApi.orderbook$('btc_usdt');
+    const bitfinexApi = new BitfinexApi();
+    this.ticker$ = bitfinexApi.ticker$('btc_usd');
+    this.orderbook$ = bitfinexApi.orderbook$('btc_usd');
   }
 
 }

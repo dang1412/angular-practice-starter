@@ -1,7 +1,7 @@
-<p>
-  ccex-page works!
-</p>
+<p>Ticker</p>
+<app-ccex-ticker [ticker]="ticker$ | async"></app-ccex-ticker>
 
-{{ ticker$ | async | json }}
+<p>Orderbook</p>
+<app-ccex-orderbook [orderbook]="orderbook$ | async"></app-ccex-orderbook>
 
-{{ orderbook$ | async | json }}
+<!-- {{ orderbook$ | async | json }} -->
