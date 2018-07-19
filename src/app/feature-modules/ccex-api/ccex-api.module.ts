@@ -7,6 +7,8 @@ import { CcexApiPages } from './pages';
 // components
 import { CcexApiComponents } from './components';
 
+import { CcexApiServices } from './services';
+
 // routing
 import { CcexApiRoutingModule } from './ccex-api-routing.module';
 
@@ -18,6 +20,9 @@ import { CcexApiRoutingModule } from './ccex-api-routing.module';
   declarations: [
     ...CcexApiPages,
     ...CcexApiComponents,
+  ],
+  providers: [
+    ...CcexApiServices,
   ],
 })
 export class CcexApiModule { }
