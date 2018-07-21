@@ -3,15 +3,18 @@
 This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Features
- - Follows official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
- - Lint setup
+ - Following official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
  - Good practice to import and use [Angular Material](https://angular.io/guide/styleguide).
- - Integrate [D3Js](https://d3js.org/)
-   - checkout branch `feature/d3`.
- - Integrate [Tradingview](https://www.tradingview.com/chart/)
-   - checkout branch `feature/tradingview`.
- - Integrate [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api, strongly support for tradingview datafeed).
-   - checkout branch `feature/ccex-api`.
+ - Managing username/password authentication.
+ - Using [Tradingview](https://www.tradingview.com/chart/) with naive official sample, branch [`feature/tradingview`](https://github.com/dang1412/angular-practice-starter/tree/feature/tradingview)
+ - Using [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api) including Tradingview with realtime datafeed from exchanges, branch [`feature/ccex-api`](https://github.com/dang1412/angular-practice-starter/tree/feature/ccex-api).
+
+ ## TODO
+  - Using [D3Js](https://d3js.org/), branch `feature/d3`.
+  - Using Firebase authentication.
+  - Using Google Drive storage.
+  - Using AWS S3.
+  - ... Please tell me more.
 
 ## Overall structure
 
