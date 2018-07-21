@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
-import { widget, onready, IChartingLibraryWidget } from '../../../../assets/charting_library/charting_library.min';
-import { UDFCompatibleDatafeed } from '../../../../assets/datafeeds/udf/src/udf-compatible-datafeed';
+import { widget, IChartingLibraryWidget } from '../../../../../assets/charting_library/charting_library.min';
+import { UDFCompatibleDatafeed } from '../../../../../assets/datafeeds/udf/src/udf-compatible-datafeed';
 
 @Component({
   selector: 'app-tradingview',
   templateUrl: './tradingview.component.html',
   styleUrls: ['./tradingview.component.scss']
 })
-export class TradingviewComponent implements OnInit {
+export class TradingViewComponent implements OnInit {
   private widget: IChartingLibraryWidget;
 
   constructor() { }

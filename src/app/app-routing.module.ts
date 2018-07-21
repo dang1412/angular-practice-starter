@@ -6,6 +6,10 @@ const appRoutes: Routes = [
     path: '',
     loadChildren: './feature-modules/feature-awesome/feature-awesome.module#FeatureAwesomeModule'
   },
+  {
+    path: 'tradingview',
+    loadChildren: './feature-modules/tradingview/tradingview.module#TradingViewModule'
+  },
 ];
 
 @NgModule({
