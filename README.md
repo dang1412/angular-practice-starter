@@ -1,11 +1,17 @@
-# Angular Best Practice Starter
+# Angular Practice Starter
 
 This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Features
  - Follows official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
+ - Lint setup
  - Good practice to import and use [Angular Material](https://angular.io/guide/styleguide).
- - Right way to integrate [Tradingview](), checkout branch `feature/tradingview-integrated`.
+ - Integrate [D3Js](https://d3js.org/)
+   - checkout branch `feature/d3`.
+ - Integrate [Tradingview](https://www.tradingview.com/chart/)
+   - checkout branch `feature/tradingview`.
+ - Integrate [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api, strongly support for tradingview datafeed).
+   - checkout branch `feature/ccex-api`.
 
 ## Overall structure
 
@@ -53,4 +59,4 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## Contributing
-If you have any comment or desired sample feature, welcome to create issue. I will check them all and help you as much as i can.
+If you have any comment or desired sample feature, welcome to create issue. I will check them all and try to be helpful as much as possible.
