@@ -1,11 +1,20 @@
-# Angular Best Practice Starter
+# Angular Practice Starter
 
 This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Features
- - Follows official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
+ - Following official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
  - Good practice to import and use [Angular Material](https://angular.io/guide/styleguide).
- - Right way to integrate [Tradingview](), checkout branch `feature/tradingview-integrated`.
+ - Managing username/password authentication.
+ - Using [Tradingview](https://www.tradingview.com/chart/) with naive official sample, branch [`feature/tradingview`](https://github.com/dang1412/angular-practice-starter/tree/feature/tradingview)
+ - Using [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api) including Tradingview with realtime datafeed from exchanges, branch [`feature/ccex-api`](https://github.com/dang1412/angular-practice-starter/tree/feature/ccex-api).
+
+ ## TODO
+  - Using [D3Js](https://d3js.org/), branch `feature/d3`.
+  - Using Firebase authentication.
+  - Using Google Drive storage.
+  - Using AWS S3.
+  - ... Please tell me more.
 
 ## Overall structure
 
@@ -53,4 +62,4 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## Contributing
-If you have any comment or desired sample feature, welcome to create issue. I will check them all and help you as much as i can.
+If you have any comment or desired sample feature, welcome to create issue. I will check them all and try to be helpful as much as possible.
