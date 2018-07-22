@@ -6,7 +6,6 @@ import { ExchangeApi } from 'ccex-api';
 import { CcexApiService } from '../../services';
 
 @Component({
-  selector: 'app-ccex-page',
   templateUrl: './ccex-page.component.html',
   styleUrls: ['./ccex-page.component.scss']
 })
@@ -15,8 +14,12 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   orderbook$: Observable<Orderbook> | any;
   trade$: Observable<Trade[]> | any;
 
-  pair = 'btc_usd';
-  exchange = 'bitfinex';
+  pair = 'btc_usdt';
+  exchange = 'binance';
+
+  get symbol(): string {
+    return `${this.exchange}-${this.pair}`;
+  }
 
   get exchangeApi(): ExchangeApi {
     return this.ccexApiService.getExchange(this.exchange);
@@ -26,12 +29,13 @@ export class CcexPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.ticker$ = this.exchangeApi.ticker$(this.pair);
-    this.orderbook$ = this.exchangeApi.orderbook$(this.pair);
+    // this.orderbook$ = this.exchangeApi.orderbook$(this.pair);
   }
 
   ngOnDestroy() {
-    // this.exchangeApi.stopTicker(this.pair);
+    this.exchangeApi.stopTicker(this.pair);
     this.exchangeApi.stopOrderbook(this.pair);
+    this.exchangeApi.stopLastCandle(this.pair);
   }
 
 }
