@@ -37,9 +37,9 @@ export class CcexApiDatafeed implements IBasicDataFeed {
   // Symbol format {exchange}-{pair}, ex: 'btfinex-btc_usd'
   resolveSymbol(symbolName: string, onResolve: ResolveCallback, onError: ErrorCallback): void {
     const [exchange, pair] = symbolName.split('-');
-    const pricescale = getPriceScale(pair);
+    const pricescale = 10 ** getPriceDigit(pair);
     console.log('[ccex-api] pricescale', pricescale);
-    const symbolInfo = {
+    const symbolInfo: LibrarySymbolInfo = {
       name: symbolName,
       full_name: symbolName,
       exchange: exchange.toUpperCase(),
@@ -48,9 +48,9 @@ export class CcexApiDatafeed implements IBasicDataFeed {
       // 'exchange-listed': exchangePair.exchange.toUpperCase(),
       timezone: <TradingView.Timezone>'Asia/Tokyo',
       minmov: 1,
-      minmov2: 0,
+      // minmov2: 0,
       pricescale,
-      pointvalue: 1,
+      // pointvalue: 1,
       session: '24x7',
       has_intraday: true,
       has_no_volume: false,
@@ -131,7 +131,7 @@ const pairOrQuoteAssetPriceDigits = {
 };
 
 // get priceScale from pair
-function getPriceScale(pair: string): number {
+function getPriceDigit(pair: string): number {
   if (pairOrQuoteAssetPriceDigits[pair]) {
     return pairOrQuoteAssetPriceDigits[pair];
   }
