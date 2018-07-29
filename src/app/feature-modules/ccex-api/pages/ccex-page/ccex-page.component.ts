@@ -30,6 +30,7 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.ticker$ = this.exchangeApi.ticker$(this.pair);
     // this.orderbook$ = this.exchangeApi.orderbook$(this.pair);
+    this.trade$ = this.exchangeApi.trade$(this.pair);
   }
 
   ngOnDestroy() {

@@ -6,4 +6,6 @@
 <p>Orderbook</p>
 <app-ccex-orderbook [orderbook]="orderbook$ | async"></app-ccex-orderbook>
 
+{{ trade$ | async | json }}
+
 <app-ccex-tradingview [symbol]="symbol"></app-ccex-tradingview>

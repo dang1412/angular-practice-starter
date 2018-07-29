@@ -83,7 +83,7 @@ export class CcexApiDatafeed implements IBasicDataFeed {
     this.ccexApiService.getExchange(exchange)
       .fetchCandleStickRange$(pair, minutesFoot, rangeStartDate * 1000, rangeEndDate * 1000)
       .subscribe((candlesticks) => {
-        console.log('[ccex-tradingview] got candlesticks', candlesticks);
+        console.log('[ccex-tradingview] got candlesticks', new Date(rangeStartDate * 1000), new Date(rangeEndDate * 1000), candlesticks);
         // update initialLastCandle, used in 'subscribeBars'
         if (isFirstCall && candlesticks && candlesticks.length) {
           this.initialLastCandle = candlesticks[candlesticks.length - 1];
@@ -107,7 +107,7 @@ export class CcexApiDatafeed implements IBasicDataFeed {
     this.ccexApiService.getExchange(exchange).lastCandle$(pair, this.initialLastCandle, minutesFoot)
       .pipe(takeUntil(this.unsubscribeBarSubject$))
       .subscribe((lastCandle) => {
-        console.log('[ccex-tradingview] realtime candle', lastCandle);
+        // console.log('[ccex-tradingview] realtime candle', lastCandle);
         const updatedLastBar = adaptCandlestickToBar(lastCandle);
         onTick(updatedLastBar);
       });
@@ -144,6 +144,7 @@ function getPriceDigit(pair: string): number {
 function resolutionToMinutes(res: ResolutionString): number {
   const resStringMinuteMap = {
     'D': 1440,
+    '1D': 1440,
   };
 
   const minutes = resStringMinuteMap[res] || Number(res);
