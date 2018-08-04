@@ -1,11 +1,10 @@
 # Angular Practice Starter
-
 This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
 ## Features
  - Following official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
  - Good practice to import and use [Angular Material](https://angular.io/guide/styleguide).
- - Managing username/password authentication.
+ - Using username/password authentication.
  - Using [Tradingview](https://www.tradingview.com/chart/) with naive official sample, branch [`feature/tradingview`](https://github.com/dang1412/angular-practice-starter/tree/feature/tradingview)
  - Using [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api) including Tradingview with realtime datafeed from exchanges, branch [`feature/ccex-api`](https://github.com/dang1412/angular-practice-starter/tree/feature/ccex-api).
 
@@ -18,15 +17,15 @@ This project was originally generated with [Angular CLI](https://github.com/angu
 
 ## Overall structure
 
-`AModule -> BModule` means that module A is imported inside module B declaration file (directly import or via lazy route definition).
-
 <p align="center"><img src="assets/structure-diagram.png"></p>
 
+`AModule -> BModule` means that module A is imported inside module B declaration file (directly import or via lazy route definition).
 Inside a feature module we may have a single component or have the whole structure same to its parent app module.
 
 ## Some explanations
 
 ### Add material
+ - Create separate angular material import module file `src/shared/material.module.ts`
  - Include font style `src/index.html`
 ```
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -35,7 +34,6 @@ Inside a feature module we may have a single component or have the whole structu
 ```
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 ```
- - Create separate angular material import module file `src/shared/material.module.ts`
 
 ## Code scaffolding
 
