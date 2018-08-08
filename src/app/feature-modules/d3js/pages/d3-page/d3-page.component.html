@@ -1,0 +1,8 @@
+<app-line-chart [data]="data" [options]="options" #lineChart></app-line-chart>
+
+<div>
+  <button mat-button color="primary" (click)="update('1hour')">1hour</button>
+  <button mat-button color="primary" (click)="update('1day')">1day</button>
+  <button mat-button color="primary" (click)="update('1week')">1week</button>
+  <button mat-button color="accent" (click)="lineChart.interupt()">Interupt</button>
+</div>

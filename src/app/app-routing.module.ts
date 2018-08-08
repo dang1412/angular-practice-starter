@@ -6,6 +6,10 @@ const appRoutes: Routes = [
     path: '',
     loadChildren: './feature-modules/feature-awesome/feature-awesome.module#FeatureAwesomeModule'
   },
+  {
+    path: 'd3-js',
+    loadChildren: './feature-modules/d3js/d3js.module#D3jsModule'
+  },
 ];
 
 @NgModule({
