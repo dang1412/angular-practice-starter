@@ -1,3 +1,22 @@
+.sidenav-container {
+  height: 100%;
+  overflow: visible;
+}
+
+.sidenav {
+  position: fixed;
+}
+
+.sidenav-content {
+  overflow: visible;
+  // padding: 10px;
+}
+
+.header {
+  // position: fixed;
+  // width: 100%;
+}
+
 .app-body {
-  padding: 10px;
+  // padding: 10px;
 }

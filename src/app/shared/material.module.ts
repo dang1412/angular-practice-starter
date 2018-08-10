@@ -10,6 +10,7 @@ import {
   MatNativeDateModule,
   MatFormFieldModule,
   MatInputModule,
+  MatSidenavModule,
 } from '@angular/material';
 
 @NgModule({
@@ -24,6 +25,7 @@ import {
     MatNativeDateModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSidenavModule,
   ],
 })
 export class MaterialModule { }
