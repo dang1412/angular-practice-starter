@@ -1,3 +1,20 @@
+.sidenav {
+  position: fixed;
+  width: 300px;
+}
+
+.sidenav-content {
+  padding-top: 64px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
 .app-body {
   padding: 10px;
 }
