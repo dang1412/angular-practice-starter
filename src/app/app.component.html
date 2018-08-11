@@ -1,5 +1,5 @@
-<mat-sidenav-container class="sidenav-container" [hasBackdrop]="false">
-  <mat-sidenav #sidenav class="sidenav" mode="side" position="end">Sidenav content</mat-sidenav>
+<mat-sidenav-container class="sidenav-container" [hasBackdrop]="true">
+  <mat-sidenav #sidenav class="sidenav" mode="over" position="end">Sidenav content</mat-sidenav>
   <mat-sidenav-content class="sidenav-content">
     <app-header class="header" (menuToggle)="sidenav.toggle()"></app-header>
     <div class="app-body">
