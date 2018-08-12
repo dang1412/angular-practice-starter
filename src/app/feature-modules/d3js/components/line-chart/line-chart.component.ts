@@ -33,8 +33,8 @@ export class LineChartComponent implements OnInit, OnChanges {
     return {
       top: margin[0],
       right: margin[1],
-      bottom: margin[2],
-      left: margin[3],
+      bottom: margin[2] || margin[0],
+      left: margin[3] || margin[1],
     };
   }
 

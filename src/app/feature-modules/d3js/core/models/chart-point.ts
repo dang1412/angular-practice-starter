@@ -4,3 +4,5 @@ export interface ChartPoint {
   // price
   y: number;
 }
+
+export type ChartData = ChartPoint[];

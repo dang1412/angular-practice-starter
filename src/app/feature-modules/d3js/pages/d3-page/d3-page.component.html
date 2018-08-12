@@ -1,8 +1,11 @@
-<app-line-chart [data]="data" [options]="options" #lineChart></app-line-chart>
+<!-- <app-line-chart [data]="singleData" [options]="areaOptions" #lineChart></app-line-chart> -->
 
 <div>
   <button mat-button color="primary" (click)="update('1hour')">1hour</button>
   <button mat-button color="primary" (click)="update('1day')">1day</button>
   <button mat-button color="primary" (click)="update('1week')">1week</button>
-  <button mat-button color="accent" (click)="lineChart.interupt()">Interupt</button>
+  <!-- <button mat-button color="accent" (click)="lineChart.interupt()">Interupt</button> -->
 </div>
+
+<app-multi-line-chart [multiData]="multiData" [options]="lineOptions"></app-multi-line-chart>
+<app-area-chart [multiData]="[singleData]" [options]="areaOptions"></app-area-chart>

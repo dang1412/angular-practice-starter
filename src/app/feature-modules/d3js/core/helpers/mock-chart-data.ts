@@ -57,7 +57,7 @@ function generateChartData(
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
  */
-function getRandomArbitrary(min: number, max: number): number {
+export function getRandomArbitrary(min: number, max: number): number {
   const value = Math.random() * (max - min) + min;
-  return Math.round(value / 1000) * 1000;
+  return value;
 }
