@@ -13,19 +13,19 @@ import { AreaChart } from '../../core/charts';
 export class AreaChartComponent implements OnInit, OnChanges {
   @ViewChild('chart') svgElement: ElementRef;
   @Input() options: ChartOptions;
-  @Input() multiData: ChartData[];
+  @Input() data: ChartData;
   private chart: AreaChart;
 
   constructor() { }
 
   ngOnInit() {
-    this.chart = new AreaChart(this.svgElement.nativeElement, this.options, this.multiData);
+    this.chart = new AreaChart(this.svgElement.nativeElement, this.options, this.data);
   }
 
   ngOnChanges() {
     if (this.chart) {
       this.chart.setOptions(this.options);
-      this.chart.setData(this.multiData);
+      this.chart.setData(this.data);
       this.chart.update();
     }
   }

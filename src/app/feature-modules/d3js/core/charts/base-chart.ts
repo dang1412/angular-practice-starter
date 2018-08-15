@@ -92,7 +92,7 @@ export abstract class XYBaseChart {
     const xScale = getLinearScale(this.multiData, 'x', chartWidth, false);
     const yScale = getLinearScale(this.multiData, 'y', chartHeight, true, true);
 
-    const chartGenerator = this.getChartGenerator(xScale, yScale, chartHeight);
+    const chartGenerator = this.getChartGenerator(this.multiData, xScale, yScale, chartHeight);
 
     charts
       .transition()
@@ -104,7 +104,12 @@ export abstract class XYBaseChart {
       });
   }
 
-  protected abstract getChartGenerator(xScale: ScaleLinear<number, number>, yScale: ScaleLinear<number, number>, chartHeight: number);
+  protected abstract getChartGenerator(
+    multiData: ChartData[],
+    xScale: ScaleLinear<number, number>,
+    yScale: ScaleLinear<number, number>,
+    chartHeight: number
+  );
 }
 
 // scale linear mapping a value from 'domain' to 'range'

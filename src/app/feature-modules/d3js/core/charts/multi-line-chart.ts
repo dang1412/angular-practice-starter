@@ -48,7 +48,7 @@ export class MultiLineChart {
   }
 
   update() {
-    console.log('[update]', this.options, this.multiData);
+    console.log('[update] MultiLineChart', this.options, this.multiData);
     const options = this.options;
     this.svg
       .attr('width', options.width)
