@@ -22,9 +22,7 @@ export class MultiLineChartComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.chart) {
-      this.chart.setOptions(this.options);
-      this.chart.setData(this.multiData);
-      this.chart.update();
+      this.chart.update(this.options, this.multiData);
     }
   }
 

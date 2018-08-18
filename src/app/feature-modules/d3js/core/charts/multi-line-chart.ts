@@ -1,4 +1,4 @@
-import { select, Selection, scaleLinear, ScaleLinear, min, max, line, Line } from 'd3';
+import { select, Selection, scaleLinear, ScaleLinear, min, max, line, Line, scaleOrdinal, schemeCategory10 } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 
 import { ChartOptions, ChartData, ChartPoint } from '../models';
@@ -7,11 +7,10 @@ import { defaultOptions } from '../constants';
 export class MultiLineChart {
   private svgElement: any;
   private svg: Selection<any, {}, null, undefined>;
-  private options: ChartOptions;
-  private multiData: ChartData[];
 
-  get margin() {
-    const originMargin = this.options.margin;
+  private getMargin(originMargin: number | [number, number, number, number]) {
+    // const originMargin = this.options.margin;
+    originMargin = originMargin || 0;
     const margin = typeof originMargin === 'number' ? [originMargin, originMargin, originMargin, originMargin] : originMargin;
 
     return {
@@ -23,39 +22,29 @@ export class MultiLineChart {
   }
 
   constructor(svgElement: any, options: ChartOptions, multiData: ChartData[]) {
-    this.svgElement = svgElement;
-    this.svg = select(svgElement);
-    this.init(options, multiData);
+    this.init(svgElement);
+    this.update(options, multiData);
   }
 
-  private init(options: ChartOptions, multiData: ChartData[]): void {
+  private init(svgElement: any): void {
+    this.svgElement = svgElement;
+    this.svg = select(svgElement);
+
     // append element g.charts-container for the first time
     this.svg
       .append('g')
       .attr('class', 'charts-container');
-
-    this.setOptions(options);
-    this.setData(multiData);
-    this.update();
   }
 
-  setOptions(options: ChartOptions) {
-    this.options = Object.assign({}, defaultOptions, options);
-  }
-
-  setData(multiData: ChartData[]) {
-    this.multiData = multiData;
-  }
-
-  update() {
+  update(chartOptions: ChartOptions, multiData: ChartData[]) {
     console.log('[update] MultiLineChart', this.options, this.multiData);
-    const options = this.options;
+    const options = Object.assign({}, defaultOptions, chartOptions);
     this.svg
       .attr('width', options.width)
       .attr('height', options.height);
 
-    // compute chartWidth, chartHeight
-    const margin = this.margin;
+    // compute margin, chartWidth, chartHeight
+    const margin = this.getMargin(options.margin);
     const width = +this.svgElement.getBoundingClientRect().width;
     const height = +this.svgElement.getBoundingClientRect().height;
     const chartWidth = width - margin.left - margin.right;
@@ -66,21 +55,24 @@ export class MultiLineChart {
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
       ;
 
-    // @see update, enter, exit elements (data-join) https://bl.ocks.org/mbostock/3808218
+    /**
+     * @see update, enter, exit elements (data-join) https://bl.ocks.org/mbostock/3808218
+     */
+
     // update elements
     let charts = chartsContainer
       .selectAll('path.chart')
-      .data(this.multiData)
+      .data(multiData)
       ;
 
     // compute xScale, yScale from multiData and chart size
-    const xScale = getLinearScale(this.multiData, 'x', chartWidth);
-    const yScale = getLinearScale(this.multiData, 'y', chartHeight, true);
+    const xScale = getLinearScale(multiData, 'x', chartWidth);
+    const yScale = getLinearScale(multiData, 'y', chartHeight, true);
 
     // generate initial bottom line, ready for first time transition or before remove
     const initChartGenerator = this.initChartGeneratorFactory(xScale, chartHeight);
-    // exit element have no new data so we use new data of the first
-    const firstData = this.multiData[0];
+    // exit element have no new data so we use the first of new data array
+    const firstData = multiData[0];
     // transition and remove exit elements
     charts.exit()
       .transition()
@@ -107,15 +99,18 @@ export class MultiLineChart {
       ;
 
     const chartGenerator = this.chartGeneratorFactory(xScale, yScale);
+    const color = scaleOrdinal(schemeCategory10);
 
     charts
       .transition()
       .duration(options.animateDuration)
+      .attr('stroke', (d, i) => color(i + ''))
       .attrTween('d', function (d) {
         const previous = select(this).attr('d');
         const current = chartGenerator(d);
         return interpolatePath(previous, current);
-      });
+      })
+      ;
   }
 
   // generate bottom line
