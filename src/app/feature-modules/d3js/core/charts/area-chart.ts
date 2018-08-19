@@ -61,11 +61,10 @@ import { defaultOptions } from '../constants';
 export class AreaChart {
   private svgElement: any;
   private svg: Selection<any, {}, null, undefined>;
-  private options: ChartOptions;
-  private data: ChartData;
+  // private options: ChartOptions;
+  // private data: ChartData;
 
-  get margin() {
-    const originMargin = this.options.margin;
+  private getMargin(originMargin: number | [number, number, number, number]) {
     const margin = typeof originMargin === 'number' ? [originMargin, originMargin, originMargin, originMargin] : originMargin;
 
     return {
@@ -77,40 +76,29 @@ export class AreaChart {
   }
 
   constructor(svgElement: any, options: ChartOptions, data: ChartData) {
-    this.svgElement = svgElement;
-    this.svg = select(svgElement);
-    this.init(options, data);
+    this.init(svgElement);
+    this.update(options, data);
   }
 
-  private init(options: ChartOptions, data: ChartData): void {
-    // append element g.chart-container, path.chart for the first time
+  private init(svgElement: any): void {
+    this.svgElement = svgElement;
+    this.svg = select(svgElement);
+    // append element g.chart-container
     this.svg
       .append('g')
       .attr('class', 'chart-container')
       ;
-
-    this.setOptions(options);
-    this.setData(data);
-    this.update();
   }
 
-  setOptions(options: ChartOptions) {
-    this.options = Object.assign({}, defaultOptions, options);
-  }
-
-  setData(data: ChartData) {
-    this.data = data;
-  }
-
-  update() {
-    console.log('[update] AreaChart', this.options, this.data);
-    const options = this.options;
+  update(chartOptions: ChartOptions, data: ChartData) {
+    console.log('[update] AreaChart', chartOptions, data);
+    const options = Object.assign({}, defaultOptions, chartOptions);
     this.svg
       .attr('width', options.width)
       .attr('height', options.height);
 
     // compute chartWidth, chartHeight
-    const margin = this.margin;
+    const margin = this.getMargin(options.margin);
     const width = +this.svgElement.getBoundingClientRect().width;
     const height = +this.svgElement.getBoundingClientRect().height;
     const chartWidth = width - margin.left - margin.right;
@@ -125,12 +113,12 @@ export class AreaChart {
     // update elements
     let chart = chartContainer
       .selectAll('path.chart')
-      .data([this.data])
+      .data([data])
       ;
 
     // compute xScale, yScale from multiData and chart size
-    const xScale = getLinearScale(this.data, 'x', chartWidth);
-    const yScale = getLinearScale(this.data, 'y', chartHeight, true);
+    const xScale = getLinearScale(data, 'x', chartWidth);
+    const yScale = getLinearScale(data, 'y', chartHeight, true);
 
     // generate initial bottom line, ready for first time transition
     const initChartGenerator = this.initChartGeneratorFactory(xScale, chartHeight);

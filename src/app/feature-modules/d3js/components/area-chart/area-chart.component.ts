@@ -24,9 +24,7 @@ export class AreaChartComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     if (this.chart) {
-      this.chart.setOptions(this.options);
-      this.chart.setData(this.data);
-      this.chart.update();
+      this.chart.update(this.options, this.data);
     }
   }
 
