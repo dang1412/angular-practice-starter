@@ -1,13 +1,26 @@
-import { select, Selection, scaleLinear, ScaleLinear, min, max, line, Line, scaleOrdinal, schemeCategory10 } from 'd3';
+import { select, Selection, scaleLinear, ScaleLinear, min, max, line, Line, scaleOrdinal, schemeCategory10, bisector } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 
 import { ChartOptions, ChartData, ChartPoint } from '../models';
 import { defaultOptions } from '../constants';
 
 export class MultiLineChart {
+  // svg native element
   private svgElement: any;
+  // svg d3 selection
   private svg: Selection<any, {}, null, undefined>;
+  // options
+  private options: ChartOptions;
+  // data
+  private multiData: ChartData[];
+  // x scale
+  private xScale: ScaleLinear<number, number>;
+  // y scale
+  private yScale: ScaleLinear<number, number>;
+  // d3 color
+  private d3Color = scaleOrdinal(schemeCategory10);
 
+  // compute margin
   private getMargin(originMargin: number | [number, number, number, number]) {
     // const originMargin = this.options.margin;
     originMargin = originMargin || 0;
@@ -30,15 +43,21 @@ export class MultiLineChart {
     this.svgElement = svgElement;
     this.svg = select(svgElement);
 
-    // append element g.charts-container for the first time
+    // append element g.charts-container
     this.svg
       .append('g')
       .attr('class', 'charts-container');
+
+    // append element g.focuses-container
+    this.svg
+      .append('g')
+      .attr('class', 'focuses-container');
   }
 
   update(chartOptions: ChartOptions, multiData: ChartData[]) {
     console.log('[update] MultiLineChart', chartOptions, multiData);
-    const options = Object.assign({}, defaultOptions, chartOptions);
+    this.multiData = multiData;
+    const options = this.options = Object.assign({}, defaultOptions, chartOptions);
     this.svg
       .attr('width', options.width)
       .attr('height', options.height);
@@ -66,8 +85,8 @@ export class MultiLineChart {
       ;
 
     // compute xScale, yScale from multiData and chart size
-    const xScale = getLinearScale(multiData, 'x', chartWidth);
-    const yScale = getLinearScale(multiData, 'y', chartHeight, true);
+    const xScale = this.xScale = getLinearScale(multiData, 'x', chartWidth);
+    const yScale = this.yScale = getLinearScale(multiData, 'y', chartHeight, true);
 
     // generate initial bottom line, ready for first time transition or before remove
     const initChartGenerator = this.initChartGeneratorFactory(xScale, chartHeight);
@@ -99,12 +118,11 @@ export class MultiLineChart {
       ;
 
     const chartGenerator = this.chartGeneratorFactory(xScale, yScale);
-    const color = scaleOrdinal(schemeCategory10);
 
     charts
       .transition()
       .duration(options.animateDuration)
-      .attr('stroke', (d, i) => color(i + ''))
+      .attr('stroke', (d, i) => this.d3Color(i + ''))
       .attrTween('d', function (d) {
         const previous = select(this).attr('d');
         const current = chartGenerator(d);
@@ -133,6 +151,61 @@ export class MultiLineChart {
     return chartLine;
   }
 
+  /**
+   * handle svg touch, assume that all chartData have same x values
+   * @param touchX touch x position relative to svg
+   */
+  touch(touchX: number): number {
+    const data0 = this.multiData[0];
+    const margin = this.getMargin(this.options.margin);
+
+    // @see https://bl.ocks.org/mbostock/3902569
+    // compute chart x position circleX from touch position
+    // invert value from range -> domain
+    const x0 = this.xScale.invert(touchX);
+    const bisect = bisector<ChartPoint, any>((d) => d.x).left;
+    const i = bisect(data0, x0, 1);
+    const d0 = data0[i - 1];
+    const d1 = data0[i];
+    const touchIndex = d1 && x0 - d0.x > d1.x - x0 ? i : i - 1;
+    const circleX = this.xScale(data0[touchIndex].x);
+
+    const focusesContainer = this.svg
+      .select('g.focuses-container')
+      .style('display', '')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      ;
+
+    let focuses = focusesContainer
+      .selectAll('circle.focus')
+      .data(this.multiData)
+      ;
+
+    focuses.exit().remove();
+
+    focuses = focuses.enter()
+      .append('circle')
+      .attr('class', 'focus')
+      .attr('fill', 'white')
+      .attr('stroke', (d, ind) => this.d3Color('' + ind))
+      .attr('r', 3)
+      .merge(focuses)
+      ;
+
+    // update focuses position
+    focuses
+      .attr('cx', circleX)
+      .attr('cy', (data) => this.yScale(data[touchIndex].y))
+      ;
+
+    return circleX;
+  }
+
+  untouch(): void {
+    this.svg
+      .select('g.focuses-container')
+      .style('display', 'none');
+  }
 }
 
 // scale linear mapping a value from 'domain' to 'range'

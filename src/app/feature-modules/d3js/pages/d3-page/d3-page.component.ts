@@ -28,9 +28,9 @@ export class D3PageComponent implements OnInit {
     };
 
     this.lineOptions = {
-      width: 400,
       height: 200,
-      animateDuration: 1000
+      animateDuration: 1000,
+      margin: 10
     };
   }
 
