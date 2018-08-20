@@ -1,5 +1,15 @@
 :host {
   padding: 5px;
-  border: 1px solid grey;
+  border: 1px dashed grey;
   display: block;
+  font-family: Roboto;
+}
+
+.example-header-image {
+  background-image: url(https://material.angular.io/assets/img/examples/shiba1.jpg);
+  background-size: cover;
+}
+
+.example-card {
+  max-width: 400px;
 }

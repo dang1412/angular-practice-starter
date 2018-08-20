@@ -1,4 +1,9 @@
-<app-header></app-header>
-<div class="app-body">
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container class="sidenav-container" [hasBackdrop]="true">
+  <mat-sidenav #sidenav class="sidenav" mode="over" position="end">Sidenav content</mat-sidenav>
+  <mat-sidenav-content class="sidenav-content">
+    <app-header class="header" (menuToggle)="sidenav.toggle()"></app-header>
+    <div class="app-body">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
