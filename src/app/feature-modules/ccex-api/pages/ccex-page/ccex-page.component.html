@@ -1,11 +1,30 @@
-<h1>{{ exchange }} {{ pair }}</h1>
-
-<p>Ticker</p>
-<app-ccex-ticker [ticker]="ticker$ | async"></app-ccex-ticker>
+<!-- <h1>{{ exchange }} {{ pair }}</h1>
 
 <p>Orderbook</p>
 <app-ccex-orderbook [orderbook]="orderbook$ | async"></app-ccex-orderbook>
 
 {{ trade$ | async | json }}
 
-<app-ccex-tradingview [symbol]="symbol"></app-ccex-tradingview>
+<app-ccex-tradingview [symbol]="symbol"></app-ccex-tradingview> -->
+
+<mat-form-field>
+  <mat-select placeholder="Exchange" [value]="exchange$ | async" (valueChange)="selectExchange($event)">
+    <mat-option *ngFor="let exchange of exchanges" [value]="exchange">
+      {{ exchange }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<mat-form-field>
+  <mat-select placeholder="Pair" [value]="pair$ | async" (valueChange)="selectPair($event)">
+    <mat-option *ngFor="let pair of pairs" [value]="pair">
+      {{ pair }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<p>Ticker</p>
+<app-ccex-ticker [ticker]="ticker$ | async"></app-ccex-ticker>
+
+<p>Chart</p>
+<app-ccex-chart [data]="chartData$ | async" [options]="chartOptions"></app-ccex-chart>

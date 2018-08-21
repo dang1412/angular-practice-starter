@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.ticker-card {
+  max-width: 100%;
+  padding: 12px;
+}
+
+.ticker-table {
+  th,
+  td {
+    padding: 5px;
+  }
+  th {
+    font-size: 12px;
+    color: #aaa;
+    text-align: left;
+  }
+  td {
+    font-size: 16px;
+    color: #666;
+    font-weight: bold;
+    text-align: right;
+  }
+}

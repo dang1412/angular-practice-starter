@@ -8,6 +8,15 @@ const corsProxy = 'https://api.exchangecompare.com/';
 export class CcexApiService {
   private exchangeServices: { [exchange: string]: ExchangeApi } = {};
 
+  get supportedExchanges(): string[] {
+    return [
+      'binance',
+      'bitbank',
+      'bitfinex',
+      'coinbase',
+    ];
+  }
+
   getExchange(exchange: string): ExchangeApi {
     if (!this.exchangeServices[exchange]) {
       this.exchangeServices[exchange] = exchangeInstance(exchange);

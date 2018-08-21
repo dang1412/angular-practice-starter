@@ -17,6 +17,7 @@ import { MaterialModule } from './material.module';
   ],
   declarations: [
     ...SharedComponents,
+    ...SharedDirectives,
     ...SharedPipes,
   ],
   exports: [

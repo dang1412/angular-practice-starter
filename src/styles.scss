@@ -7,4 +7,34 @@ html, body {
 
 body {
   margin: 0;
+  font-family: Roboto;
+}
+
+// up/down animations
+.up {
+  animation-name: animatedUpColor;
+  animation-duration: 1.2s;
+}
+
+.down {
+  animation-name: animatedDownColor;
+  animation-duration: 1.2s;
+}
+
+@keyframes animatedUpColor {
+  from {
+    color: #84f766;
+  }
+  to {
+    color: currentValue;
+  }
+}
+
+@keyframes animatedDownColor {
+  from {
+    color: #ff6939;
+  }
+  to {
+    color: currentValue;
+  }
 }

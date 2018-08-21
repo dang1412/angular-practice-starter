@@ -1,4 +1,4 @@
-<table *ngIf="ticker">
+<!-- <table *ngIf="ticker">
   <tr>
     <th>Price ({{ ticker.change24Perc }})</th>
     <td>{{ ticker.last }}</td>
@@ -17,4 +17,41 @@
     <th>High</th>
     <td>{{ ticker.high }}</td>
   </tr>
-</table>
+</table> -->
+<div class="wrapper">
+  <mat-card *ngIf="ticker" class="ticker-card">
+    <table class="ticker-table">
+      <tr>
+        <th>Price&nbsp;(
+          <span [cpeChangePercent]="ticker.change24Perc"></span>)</th>
+        <td>
+          <span cpeUpDownAnimate [value]="ticker.last"></span>
+        </td>
+        <th>Volume 24h</th>
+        <td>
+          <span cpeUpDownAnimate [value]="ticker.vol"></span>
+        </td>
+      </tr>
+      <tr>
+        <th>Best bid</th>
+        <td>
+          <span cpeUpDownAnimate [value]="ticker.bid"></span>
+        </td>
+        <th>Best ask</th>
+        <td>
+          <span cpeUpDownAnimate [value]="ticker.ask"></span>
+        </td>
+      </tr>
+      <tr *ngIf="ticker.low || ticker.high">
+        <th>Low 24h</th>
+        <td>
+          <span cpeUpDownAnimate [value]="ticker.low"></span>
+        </td>
+        <th>High 24h</th>
+        <td>
+          <span cpeUpDownAnimate [value]="ticker.high"></span>
+        </td>
+      </tr>
+    </table>
+  </mat-card>
+</div>
