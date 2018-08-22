@@ -8,6 +8,13 @@ import { CcexApiService, CcexApiChartService } from '../../services';
 import { withLatestFrom, map, switchMap, filter, startWith, pairwise } from 'rxjs/operators';
 import { ChartPeriodResolution } from '../../services/ccex-api-chart.service';
 
+const resolutionTimeFormatMap = {
+  [ChartPeriodResolution.hour]: '%H:%M',
+  [ChartPeriodResolution.day]: '%H:%M',
+  [ChartPeriodResolution.week]: '%m/%d',
+  [ChartPeriodResolution.month]: '%m/%d',
+};
+
 @Component({
   templateUrl: './ccex-page.component.html',
   styleUrls: ['./ccex-page.component.scss']
@@ -25,6 +32,9 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   exchange$ = new ReplaySubject<string>(1);
   pairs = [];
   pair$ = new ReplaySubject<string>(1);
+
+  // tradingview
+  symbol$ = new ReplaySubject<string>(1);
 
   // get symbol(): string {
   //   return `${this.exchange}-${this.pair}`;
@@ -72,7 +82,10 @@ export class CcexPageComponent implements OnInit, OnDestroy {
 
     this.chartOptions = {
       animateDuration: 1000,
-      fillColor: '#ffebc5'
+      height: 300,
+      fillColor: '#ffebc5',
+      timeFormat: resolutionTimeFormatMap[ChartPeriodResolution.day],
+      margin: [30, 0]
     };
 
     this.selectExchange('bitbank');

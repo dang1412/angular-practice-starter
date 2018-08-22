@@ -4,6 +4,7 @@ export interface ChartOptions {
   strokeColor?: string;
   fillColor?: string;
   // top right bottom left
-  margin?: number | [number, number, number, number];
+  margin?: number | number[];
   animateDuration?: number;
+  timeFormat?: string;
 }

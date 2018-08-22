@@ -52,7 +52,7 @@
 //   }
 // }
 
-import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area } from 'd3';
+import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area, axisBottom, timeFormat } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 
 import { ChartOptions, ChartData, ChartPoint } from '../models';
@@ -64,7 +64,7 @@ export class AreaChart {
   // private options: ChartOptions;
   // private data: ChartData;
 
-  private getMargin(originMargin: number | [number, number, number, number]) {
+  private getMargin(originMargin: number | number[]) {
     const margin = typeof originMargin === 'number' ? [originMargin, originMargin, originMargin, originMargin] : originMargin;
 
     return {
@@ -83,10 +83,16 @@ export class AreaChart {
   private init(svgElement: any): void {
     this.svgElement = svgElement;
     this.svg = select(svgElement);
+
     // append element g.chart-container
     this.svg
       .append('g')
       .attr('class', 'chart-container')
+      ;
+
+    this.svg
+      .append('g')
+      .attr('class', 'xAxis')
       ;
   }
 
@@ -102,7 +108,7 @@ export class AreaChart {
     const width = +this.svgElement.getBoundingClientRect().width;
     const height = +this.svgElement.getBoundingClientRect().height;
     const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
 
     // select g.chart-container, update position
     const chartContainer = this.svg.select('g.chart-container')
@@ -142,6 +148,26 @@ export class AreaChart {
         const current = chartGenerator(d);
         return interpolatePath(previous, current);
       });
+
+    // draw axisX
+    const xExtent = extent(data, (point) => point.x);
+    const gXAxis = this.svg.select('g.xAxis');
+    const xAxis = axisBottom(xScale)
+      .tickValues(xExtent)
+      .tickSize(0)
+      .tickFormat(timeFormat(options.timeFormat));
+
+    const textAnchorAttrs = ['start', 'end'];
+    gXAxis
+      .call(xAxis)
+      .attr('font-size', '12px')
+      .attr('transform', 'translate(' + margin.left + ',' + (chartHeight + margin.top + 6) + ')')
+      .select('.domain')
+      .remove();
+    gXAxis
+      .selectAll('text')
+      .attr('fill', '#c4c4c4')
+      .attr('text-anchor', (d, i) => textAnchorAttrs[i]);
   }
 
   // generate bottom line

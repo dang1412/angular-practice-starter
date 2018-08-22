@@ -6,7 +6,7 @@ import { ChartData, ChartPoint } from '../../../../libs/d3/models';
 import { CcexApiService } from './ccex-api.service';
 import { map } from 'rxjs/operators';
 
-// value is also resolution in minutes number
+// resolution in minutes
 export enum ChartPeriodResolution {
   hour = 1,
   day = 15,
