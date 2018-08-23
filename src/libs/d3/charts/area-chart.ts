@@ -52,7 +52,7 @@
 //   }
 // }
 
-import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area, axisBottom, timeFormat } from 'd3';
+import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area, axisBottom, timeFormat, axisRight } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 
 import { ChartOptions, ChartData, ChartPoint } from '../models';
@@ -93,6 +93,11 @@ export class AreaChart {
     this.svg
       .append('g')
       .attr('class', 'xAxis')
+      ;
+
+    this.svg
+      .append('g')
+      .attr('class', 'yAxis')
       ;
   }
 
@@ -168,6 +173,21 @@ export class AreaChart {
       .selectAll('text')
       .attr('fill', '#c4c4c4')
       .attr('text-anchor', (d, i) => textAnchorAttrs[i]);
+
+    // yAxis
+    const yExtent = extent(data, (point) => point.y);
+    const gYAxisRight = this.svg.select('g.yAxis');
+    const yAxisRight = axisRight(yScale)
+      .tickValues(yExtent)
+      .tickPadding(0)
+      .tickSize(0);
+    gYAxisRight
+      .call(yAxisRight)
+      .attr('font-size', '12px')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      .select('.domain')
+      .remove();
+    gYAxisRight.selectAll('text').attr('fill', '#c4c4c4').attr('dy', 0);
   }
 
   // generate bottom line

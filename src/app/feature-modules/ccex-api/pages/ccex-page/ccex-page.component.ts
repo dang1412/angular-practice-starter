@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, BehaviorSubject, ReplaySubject } from 'rxjs';
+import { Observable, BehaviorSubject, ReplaySubject, combineLatest } from 'rxjs';
 import { Ticker, Orderbook, Trade } from 'ccex-api/exchanges/exchange-types';
 import { ExchangeApi } from 'ccex-api';
 
@@ -25,6 +25,13 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   // trade$: Observable<Trade[]> | any;
   chartData$: Observable<ChartData>;
   chartOptions: ChartOptions;
+  chartResolutions = [
+    ChartPeriodResolution.hour,
+    ChartPeriodResolution.day,
+    ChartPeriodResolution.week,
+    ChartPeriodResolution.month,
+  ];
+  chartResolution$ = new ReplaySubject<ChartPeriodResolution>(1);
 
   // pair = 'btc_usdt';
   // exchange = 'binance';
@@ -76,20 +83,23 @@ export class CcexPageComponent implements OnInit, OnDestroy {
         return this.ccexApiService.getExchange(exchange).ticker$(pair);
       }));
 
-    this.chartData$ = pairWithLatestExchange$.pipe(switchMap(([pair, exchange]) => {
-      return this.ccexApiChartService.getChart$(exchange, pair, ChartPeriodResolution.day);
+    this.chartData$ = combineLatest(pairWithLatestExchange$, this.chartResolution$).pipe(switchMap(([[pair, exchange], res]) => {
+      return this.ccexApiChartService.getChart$(exchange, pair, res);
     }));
 
-    this.chartOptions = {
-      animateDuration: 1000,
-      height: 300,
-      fillColor: '#ffebc5',
-      timeFormat: resolutionTimeFormatMap[ChartPeriodResolution.day],
-      margin: [30, 0]
-    };
+    this.chartResolution$.subscribe((res) => {
+      this.chartOptions = {
+        animateDuration: 1000,
+        height: 300,
+        fillColor: '#ffebc5',
+        timeFormat: resolutionTimeFormatMap[res],
+        margin: [30, 0]
+      };
+    });
 
     this.selectExchange('bitbank');
     this.selectPair('btc_jpy');
+    this.selectChartResolution(ChartPeriodResolution.day);
   }
 
   selectExchange(exchange: string): void {
@@ -98,6 +108,19 @@ export class CcexPageComponent implements OnInit, OnDestroy {
 
   selectPair(pair: string): void {
     this.pair$.next(pair);
+  }
+
+  selectChartResolution(res: ChartPeriodResolution): void {
+    this.chartResolution$.next(res);
+  }
+
+  getResPeriodText(res: ChartPeriodResolution): string {
+    switch (res) {
+      case ChartPeriodResolution.hour: return 'hour';
+      case ChartPeriodResolution.day: return 'day';
+      case ChartPeriodResolution.week: return 'week';
+      case ChartPeriodResolution.month: return 'month';
+    }
   }
 
   ngOnDestroy() {

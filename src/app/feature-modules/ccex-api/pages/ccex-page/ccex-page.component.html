@@ -27,4 +27,7 @@
 <app-ccex-ticker [ticker]="ticker$ | async"></app-ccex-ticker>
 
 <p>Chart</p>
+<mat-button-toggle-group [value]="chartResolution$ | async" (valueChange)="selectChartResolution($event)">
+  <mat-button-toggle *ngFor="let res of chartResolutions" [value]="res">{{getResPeriodText(res)}}</mat-button-toggle>
+</mat-button-toggle-group>
 <app-ccex-chart [data]="chartData$ | async" [options]="chartOptions"></app-ccex-chart>
