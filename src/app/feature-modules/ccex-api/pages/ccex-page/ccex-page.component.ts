@@ -5,7 +5,7 @@ import { ExchangeApi } from 'ccex-api';
 
 import { ChartData, ChartOptions } from '../../../../../libs/d3/models';
 import { CcexApiService, CcexApiChartService } from '../../services';
-import { withLatestFrom, map, switchMap, filter, startWith, pairwise } from 'rxjs/operators';
+import { withLatestFrom, map, switchMap, filter, startWith, pairwise, throttleTime } from 'rxjs/operators';
 import { ChartPeriodResolution } from '../../services/ccex-api-chart.service';
 
 const resolutionTimeFormatMap = {
@@ -83,9 +83,11 @@ export class CcexPageComponent implements OnInit, OnDestroy {
         return this.ccexApiService.getExchange(exchange).ticker$(pair);
       }));
 
-    this.chartData$ = combineLatest(pairWithLatestExchange$, this.chartResolution$).pipe(switchMap(([[pair, exchange], res]) => {
-      return this.ccexApiChartService.getChart$(exchange, pair, res);
-    }));
+    this.chartData$ = combineLatest(pairWithLatestExchange$, this.chartResolution$).pipe(
+      switchMap(([[pair, exchange], res]) => this.ccexApiChartService.getChart$(exchange, pair, res).pipe(
+        throttleTime(10000)
+      )),
+    );
 
     this.chartResolution$.subscribe((res) => {
       this.chartOptions = {

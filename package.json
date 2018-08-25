@@ -23,10 +23,11 @@
     "@angular/platform-browser": "^6.0.3",
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
-    "ccex-api": "0.0.10",
+    "ccex-api": "0.0.13",
     "core-js": "^2.5.4",
     "d3": "^5.5.0",
     "d3-interpolate-path": "^2.0.1",
+    "hammerjs": "^2.0.8",
     "rxjs": "^6.0.0",
     "zone.js": "^0.8.26"
   },

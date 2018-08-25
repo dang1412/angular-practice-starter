@@ -52,27 +52,50 @@
 //   }
 // }
 
-import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area, axisBottom, timeFormat, axisRight } from 'd3';
+import { Subject, Observable } from 'rxjs';
+import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area, axisBottom, timeFormat, axisRight, bisector } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 
 import { ChartOptions, ChartData, ChartPoint } from '../models';
 import { defaultOptions } from '../constants';
 
+
 export class AreaChart {
   private svgElement: any;
   private svg: Selection<any, {}, null, undefined>;
-  // private options: ChartOptions;
-  // private data: ChartData;
+  // options
+  private options: ChartOptions;
+  // data
+  private data: ChartData;
+  // x scale
+  private xScale: ScaleLinear<number, number>;
+  // y scale
+  private yScale: ScaleLinear<number, number>;
+  // output touch X position relative to svg
+  private svgTouchX$ = new Subject<{posX: number; point: ChartPoint}>();
+  // chart height
+  private chartHeight: number;
 
   private getMargin(originMargin: number | number[]) {
     const margin = typeof originMargin === 'number' ? [originMargin, originMargin, originMargin, originMargin] : originMargin;
 
+    // return {
+    //   top: margin[0],
+    //   right: margin[1],
+    //   bottom: margin[2] || margin[0],
+    //   left: margin[3] || margin[1],
+    // };
+
     return {
-      top: margin[0],
-      right: margin[1],
-      bottom: margin[2] || margin[0],
-      left: margin[3] || margin[1],
+      top: 22,
+      right: 60,
+      bottom: 30,
+      left: 16
     };
+  }
+
+  get touchX$(): Observable<{ posX: number; point: ChartPoint }> {
+    return this.svgTouchX$.asObservable();
   }
 
   constructor(svgElement: any, options: ChartOptions, data: ChartData) {
@@ -99,11 +122,32 @@ export class AreaChart {
       .append('g')
       .attr('class', 'yAxis')
       ;
+
+    // append element g.focuses-container
+    const focusContainer = this.svg
+      .append('g')
+      .attr('class', 'focus-container')
+      .style('display', 'none');
+
+    focusContainer
+      .append('line')
+      .attr('class', 'vertical-line')
+      .attr('stroke', '#c2e2f4')
+      .attr('y1', -2);
+
+    focusContainer
+      .append('circle')
+      .attr('class', 'focus')
+      .attr('r', 3)
+      .attr('fill', 'white')
+      .attr('stroke', '#c2e2f4')
+      ;
   }
 
   update(chartOptions: ChartOptions, data: ChartData) {
     console.log('[update] AreaChart', chartOptions, data);
-    const options = Object.assign({}, defaultOptions, chartOptions);
+    this.data = data;
+    const options = this.options = Object.assign({}, defaultOptions, chartOptions);
     this.svg
       .attr('width', options.width)
       .attr('height', options.height);
@@ -113,7 +157,7 @@ export class AreaChart {
     const width = +this.svgElement.getBoundingClientRect().width;
     const height = +this.svgElement.getBoundingClientRect().height;
     const chartWidth = width - margin.left - margin.right;
-    const chartHeight = height - margin.top - margin.bottom;
+    const chartHeight = this.chartHeight = height - margin.top - margin.bottom;
 
     // select g.chart-container, update position
     const chartContainer = this.svg.select('g.chart-container')
@@ -128,8 +172,8 @@ export class AreaChart {
       ;
 
     // compute xScale, yScale from multiData and chart size
-    const xScale = getLinearScale(data, 'x', chartWidth);
-    const yScale = getLinearScale(data, 'y', chartHeight, true);
+    const xScale = this.xScale = getLinearScale(data, 'x', chartWidth);
+    const yScale = this.yScale = getLinearScale(data, 'y', chartHeight, true);
 
     // generate initial bottom line, ready for first time transition
     const initChartGenerator = this.initChartGeneratorFactory(xScale, chartHeight);
@@ -162,7 +206,6 @@ export class AreaChart {
       .tickSize(0)
       .tickFormat(timeFormat(options.timeFormat));
 
-    const textAnchorAttrs = ['start', 'end'];
     gXAxis
       .call(xAxis)
       .attr('font-size', '12px')
@@ -172,7 +215,7 @@ export class AreaChart {
     gXAxis
       .selectAll('text')
       .attr('fill', '#c4c4c4')
-      .attr('text-anchor', (d, i) => textAnchorAttrs[i]);
+      ;
 
     // yAxis
     const yExtent = extent(data, (point) => point.y);
@@ -184,10 +227,61 @@ export class AreaChart {
     gYAxisRight
       .call(yAxisRight)
       .attr('font-size', '12px')
-      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      .attr('transform', 'translate(' + (margin.left + chartWidth + 5) + ',' + margin.top + ')')
       .select('.domain')
       .remove();
     gYAxisRight.selectAll('text').attr('fill', '#c4c4c4').attr('dy', 0);
+  }
+
+  /**
+   * handle svg touch, assume that all chartData have same x values
+   * @param touchX touch x position relative to svg
+   */
+  touch(touchX: number): number {
+    const data = this.data;
+    const margin = this.getMargin(this.options.margin);
+
+    // @see https://bl.ocks.org/mbostock/3902569
+    // compute chart x position circleX from touch position
+    // invert value from range -> domain
+    const x0 = this.xScale.invert(touchX);
+    const bisect = bisector<ChartPoint, any>((d) => d.x).left;
+    const i = bisect(data, x0, 1);
+    const d0 = data[i - 1];
+    const d1 = data[i];
+    const touchIndex = d1 && x0 - d0.x > d1.x - x0 ? i : i - 1;
+    const circleX = this.xScale(data[touchIndex].x);
+    const circleY = this.yScale(data[touchIndex].y);
+
+    const focusContainer = this.svg
+      .select('g.focus-container')
+      .style('display', '')
+      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+    focusContainer
+      .select('line.vertical-line')
+      .attr('x1', circleX)
+      .attr('x2', circleX)
+      .attr('y2', this.chartHeight)
+      ;
+    focusContainer
+      .select('circle.focus')
+      .attr('cx', circleX)
+      .attr('cy', circleY)
+      ;
+
+    this.svgTouchX$.next({
+      posX: circleX + margin.left,
+      point: data[touchIndex]
+    });
+
+    return circleX;
+  }
+
+  untouch(): void {
+    this.svg
+      .select('g.focus-container')
+      .style('display', 'none');
   }
 
   // generate bottom line
@@ -233,6 +327,7 @@ function getLinearScale(
     .domain(domain)
     .rangeRound(range);
 
-  return nice ? scale.nice() : scale;
+  // return nice ? scale.nice() : scale;
+  return scale;
 }
 

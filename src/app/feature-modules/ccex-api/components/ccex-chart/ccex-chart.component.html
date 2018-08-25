@@ -1,1 +1,12 @@
-<svg #chart></svg>
+<!-- <svg #chart></svg> -->
+<svg #chart (panmove)="panmove($event)" (panstart)="panstart($event)" (panend)="panend($event)" (press)="press($event)" (pressup)="pressup($event)">
+</svg>
+
+<div class="chart-hover-container" *ngIf="touchMode" [style.left.px]="touchX">
+  <div class="chart-hover-element" [style.top.px]="0">
+    <span class="content price">{{ touchPoint.y }}</span>
+  </div>
+  <div class="chart-hover-element" [style.bottom.px]="14">
+    <span class="content time">{{ touchPoint.x | date: 'yyyy/MM/dd HH:mm' }}</span>
+  </div>
+</div>

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { CandleStick } from 'ccex-api';
+import { Observable, concat } from 'rxjs';
+import { CandleStick, ExchangeApi } from 'ccex-api';
 
 import { ChartData, ChartPoint } from '../../../../libs/d3/models';
 import { CcexApiService } from './ccex-api.service';
-import { map } from 'rxjs/operators';
+import { map, scan, tap } from 'rxjs/operators';
 
 // resolution in minutes
 export enum ChartPeriodResolution {
@@ -27,6 +27,23 @@ export class CcexApiChartService {
   constructor(private ccexApiService: CcexApiService) { }
 
   getChart$(exchange: string, pair: string, resolution: ChartPeriodResolution): Observable<ChartData> {
+    const fetchChart$ = this.fetchChart$(exchange, pair, resolution);
+    const lastPoint$ = this.lastPoint$(exchange, pair, resolution);
+
+    return concat(fetchChart$, lastPoint$).pipe(
+      scan((chartData: ChartData, chartPoint: ChartPoint) => updateChartData(chartData, chartPoint)),
+    );
+  }
+
+  private lastPoint$(exchange: string, pair: string, resolution: ChartPeriodResolution): Observable<ChartPoint> {
+    const exchangeApi = this.ccexApiService.getExchange(exchange);
+    return exchangeApi.lastCandle$(pair, null, resolution).pipe(
+      map(adaptCandlestick),
+      tap(point => console.log('[debug] lastpoint', point))
+    );
+  }
+
+  private fetchChart$(exchange: string, pair: string, resolution: ChartPeriodResolution): Observable<ChartData> {
     const [start, end] = getRange(resolution);
     const exchangeApi = this.ccexApiService.getExchange(exchange);
     return exchangeApi.fetchCandleStickRange$(pair, resolution, start, end).pipe(map(candles => candles.map(adaptCandlestick)));
@@ -46,4 +63,30 @@ function adaptCandlestick(candle: CandleStick): ChartPoint {
     x: candle.timestamp,
     y: candle.close
   };
+}
+
+function updateChartData(chartData: ChartData, point: ChartPoint): ChartData {
+  if (!chartData || !chartData.length) {
+    return [point];
+  }
+
+  chartData = chartData.slice();
+
+  const currentLastPoint = chartData[ chartData.length - 1 ];
+
+  if (!point || point.x < currentLastPoint.x) {
+    return chartData;
+  }
+
+  if (point.x === currentLastPoint.x) {
+    // update currentLastPoint
+    currentLastPoint.y = point.y;
+    return chartData;
+  }
+
+  // remove first point before adding new point
+  chartData.shift();
+  chartData.push(point);
+
+  return chartData;
 }

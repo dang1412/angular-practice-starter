@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.chart-hover-container {
+  position: absolute;
+  height: 100%;
+  top: 0;
+}
+
+.chart-hover-element {
+  position: absolute;
+  width: 200px;
+  margin-left: -100px;
+  text-align: center;
+  font-size: 12px;
+  .content {
+    border-radius: 5px;
+    border: 1px solid #899ebc;
+    padding: 5px;
+  }
+  .time {
+    color: #899ebc;
+    background: white;
+  }
+  .price {
+    background: #899ebc;
+    color: white;
+  }
+}
