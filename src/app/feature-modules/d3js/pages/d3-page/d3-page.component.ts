@@ -20,17 +20,17 @@ export class D3PageComponent implements OnInit {
     const period = '1hour';
     this.singleData = mockChartData('btc_jpy', period);
     this.generateMultiData(period);
-    this.areaOptions = {
-      width: 400,
-      height: 200,
-      animateDuration: 1000,
-      fillColor: '#c2e2f4'
-    };
 
     this.lineOptions = {
-      height: 200,
+      height: 300,
       animateDuration: 1000,
       margin: 10
+    };
+
+    this.areaOptions = {
+      height: 300,
+      animateDuration: 1000,
+      fillColor: '#c2e2f4'
     };
   }
 
