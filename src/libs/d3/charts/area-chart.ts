@@ -1,57 +1,3 @@
-// import { ScaleLinear, area, stack } from 'd3';
-
-// import { ChartPoint, ChartData } from '../models';
-// import { XYBaseChart } from './base-chart';
-
-// draw multiple stacked area chart, assume that all charts have the same x values
-// export class AreaChart extends XYBaseChart {
-//   getChartGenerator(
-//     multiData: ChartData[], xScale: ScaleLinear<number, number>, yScale: ScaleLinear<number, number>, chartHeight: number) {
-//     const chartNumber = multiData.length;
-//     const firstChart = multiData[0];
-//     const chartLength = firstChart.length;
-//     const stackData = [];
-//     const keys = [];
-
-//     for (let i = 0; i < chartLength; i++) {
-//       const object: {[prop: string]: number} = { x: firstChart[i].x };
-//       for (let j = 0; j < chartNumber; j ++) {
-//         const chartData = multiData[j];
-//         object['y' + j] = chartData[i].y;
-//         if (i === 0) {
-//           keys.push('y' + j);
-//         }
-//       }
-
-//       stackData.push(object);
-//     }
-
-//     /**
-//      * stackData
-//      * [
-//      *  {x: '', y0: '', y1: ''},
-//      *  {x: '', y0: '', y1: ''},
-//      * ]
-//      */
-
-//     const d3Stack = stack()
-//       .keys(keys);
-
-//     const series = d3Stack(stackData);
-//     console.log('==> series', series, keys);
-
-//     // recompute yScale domain
-//     // const yDomain =
-
-//     const chartArea = area<ChartPoint>()
-//       .x((d) => xScale(d.x))
-//       .y1((d) => yScale(d.y))
-//       .y0(chartHeight);
-
-//     return chartArea;
-//   }
-// }
-
 import { Subject, Observable } from 'rxjs';
 import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area, axisBottom, timeFormat, axisRight, bisector } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
@@ -173,7 +119,7 @@ export class AreaChart {
 
     // compute xScale, yScale from multiData and chart size
     const xScale = this.xScale = getLinearScale(data, 'x', chartWidth);
-    const yScale = this.yScale = getLinearScale(data, 'y', chartHeight, true);
+    const yScale = this.yScale = getLinearScale(data, 'y', chartHeight);
 
     // generate initial bottom line, ready for first time transition
     const initChartGenerator = this.initChartGeneratorFactory(xScale, chartHeight);
@@ -257,6 +203,7 @@ export class AreaChart {
       .select('g.focus-container')
       .style('display', '')
       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+      ;
 
     focusContainer
       .select('line.vertical-line')
@@ -317,7 +264,6 @@ function getLinearScale(
   data: ChartData,
   prop: keyof ChartPoint,
   size: number,
-  nice?: boolean
 ): ScaleLinear<number, number> {
   // set domain from min -> max use extent
   const domain: [number, number] = extent(data, (point) => point[prop]);
@@ -327,7 +273,6 @@ function getLinearScale(
     .domain(domain)
     .rangeRound(range);
 
-  // return nice ? scale.nice() : scale;
   return scale;
 }
 
