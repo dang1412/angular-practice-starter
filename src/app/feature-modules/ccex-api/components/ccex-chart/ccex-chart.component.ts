@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input } from '@angular/core';
 
-import { ChartOptions, ChartData, ChartPoint } from '../../../../../libs/d3/models';
-import { AreaChart } from '../../../../../libs/d3/charts';
+// import { ChartOptions, ChartData, ChartPoint } from '../../../../../libs/d3/models';
+import { AreaChartAdvanced, ChartOptions, ChartData, ChartPoint } from '../../../d3js/core';
 
 @Component({
   selector: 'app-ccex-chart',
@@ -18,7 +18,7 @@ export class CcexChartComponent implements OnInit, OnChanges {
   touchX: number;
   touchPoint: ChartPoint;
   private svgLeft = 0;
-  private chart: AreaChart;
+  private chart: AreaChartAdvanced;
 
   press(event) {
     this.changeTouchMode(true);
@@ -54,7 +54,7 @@ export class CcexChartComponent implements OnInit, OnChanges {
   constructor() { }
 
   ngOnInit() {
-    this.chart = new AreaChart(this.svgElement.nativeElement, this.options, this.data || []);
+    this.chart = new AreaChartAdvanced(this.svgElement.nativeElement, this.options, this.data || []);
     this.svgLeft = +this.svgElement.nativeElement.getBoundingClientRect().left;
     this.chart.touchX$.subscribe(touchInfo => {
       this.touchX = touchInfo.posX;

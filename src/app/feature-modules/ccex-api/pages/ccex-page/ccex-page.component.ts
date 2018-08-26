@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { Ticker, Orderbook, Trade } from 'ccex-api/exchanges/exchange-types';
 
-import { ChartData, ChartOptions } from '../../../../../libs/d3/models';
+import { ChartData, ChartOptions } from '../../../d3js/core';
 import { CcexApiService, CcexApiChartService } from '../../services';
 import { withLatestFrom, map, switchMap, filter, startWith, pairwise, throttleTime } from 'rxjs/operators';
 import { ChartPeriodResolution } from '../../services/ccex-api-chart.service';
