@@ -4,7 +4,8 @@ import { Routes, PreloadAllModules, RouterModule } from '@angular/router';
 const appRoutes: Routes = [
   {
     path: '',
-    redirectTo: 'd3-js'
+    redirectTo: '/d3-js',
+    pathMatch: 'full'
   },
   {
     path: 'ccex-api',
