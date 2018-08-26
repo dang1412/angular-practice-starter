@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, BehaviorSubject, ReplaySubject, combineLatest } from 'rxjs';
+import { Observable, ReplaySubject, combineLatest } from 'rxjs';
 import { Ticker, Orderbook, Trade } from 'ccex-api/exchanges/exchange-types';
-import { ExchangeApi } from 'ccex-api';
 
 import { ChartData, ChartOptions } from '../../../../../libs/d3/models';
 import { CcexApiService, CcexApiChartService } from '../../services';
@@ -33,8 +32,6 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   ];
   chartResolution$ = new ReplaySubject<ChartPeriodResolution>(1);
 
-  // pair = 'btc_usdt';
-  // exchange = 'binance';
   exchanges = [];
   exchange$ = new ReplaySubject<string>(1);
   pairs = [];
@@ -54,7 +51,6 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   constructor(private ccexApiService: CcexApiService, private ccexApiChartService: CcexApiChartService) { }
 
   ngOnInit() {
-    // this.ticker$ = this.exchangeApi.ticker$(this.pair);
     // this.orderbook$ = this.exchangeApi.orderbook$(this.pair);
     // this.trade$ = this.exchangeApi.trade$(this.pair);
     this.exchanges = this.ccexApiService.supportedExchanges;
@@ -69,6 +65,7 @@ export class CcexPageComponent implements OnInit, OnDestroy {
       withLatestFrom(this.exchange$),
     );
 
+    // ticker
     this.ticker$ = pairWithLatestExchange$.pipe(
       startWith(['', '']),
       pairwise(),
@@ -83,8 +80,10 @@ export class CcexPageComponent implements OnInit, OnDestroy {
         return this.ccexApiService.getExchange(exchange).ticker$(pair);
       }));
 
+    // d3 chart
     this.chartData$ = combineLatest(pairWithLatestExchange$, this.chartResolution$).pipe(
       switchMap(([[pair, exchange], res]) => this.ccexApiChartService.getChart$(exchange, pair, res).pipe(
+        filter(chartData => !!chartData.length),
         throttleTime(10000)
       )),
     );
@@ -99,6 +98,7 @@ export class CcexPageComponent implements OnInit, OnDestroy {
       };
     });
 
+    // init
     this.selectExchange('bitbank');
     this.selectPair('btc_jpy');
     this.selectChartResolution(ChartPeriodResolution.day);

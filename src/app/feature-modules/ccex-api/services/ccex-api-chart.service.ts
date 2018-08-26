@@ -4,7 +4,7 @@ import { CandleStick, ExchangeApi } from 'ccex-api';
 
 import { ChartData, ChartPoint } from '../../../../libs/d3/models';
 import { CcexApiService } from './ccex-api.service';
-import { map, scan, tap } from 'rxjs/operators';
+import { map, scan, catchError } from 'rxjs/operators';
 
 // resolution in minutes
 export enum ChartPeriodResolution {
@@ -37,16 +37,16 @@ export class CcexApiChartService {
 
   private lastPoint$(exchange: string, pair: string, resolution: ChartPeriodResolution): Observable<ChartPoint> {
     const exchangeApi = this.ccexApiService.getExchange(exchange);
-    return exchangeApi.lastCandle$(pair, null, resolution).pipe(
-      map(adaptCandlestick),
-      tap(point => console.log('[debug] lastpoint', point))
-    );
+    return exchangeApi.lastCandle$(pair, null, resolution).pipe(map(adaptCandlestick));
   }
 
   private fetchChart$(exchange: string, pair: string, resolution: ChartPeriodResolution): Observable<ChartData> {
     const [start, end] = getRange(resolution);
     const exchangeApi = this.ccexApiService.getExchange(exchange);
-    return exchangeApi.fetchCandleStickRange$(pair, resolution, start, end).pipe(map(candles => candles.map(adaptCandlestick)));
+    return exchangeApi.fetchCandleStickRange$(pair, resolution, start, end).pipe(
+      map(candles => candles.map(adaptCandlestick)),
+      catchError(e => [])
+    );
   }
 }
 
