@@ -21,7 +21,7 @@ export class MultiLineChart {
   private d3Color = scaleOrdinal(schemeCategory10);
 
   // compute margin
-  private getMargin(originMargin: number | [number, number, number, number]) {
+  private getMargin(originMargin: number | number[]) {
     // const originMargin = this.options.margin;
     originMargin = originMargin || 0;
     const margin = typeof originMargin === 'number' ? [originMargin, originMargin, originMargin, originMargin] : originMargin;
