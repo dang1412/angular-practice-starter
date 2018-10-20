@@ -31,3 +31,5 @@
   <mat-button-toggle *ngFor="let res of chartResolutions" [value]="res" (click)="selectChartResolution(res)">{{getResPeriodText(res)}}</mat-button-toggle>
 </mat-button-toggle-group>
 <app-ccex-chart [data]="chartData$ | async" [options]="chartOptions"></app-ccex-chart>
+
+<!-- <app-ccex-binance-user-stream></app-ccex-binance-user-stream> -->

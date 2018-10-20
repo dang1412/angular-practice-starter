@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, concat } from 'rxjs';
-import { CandleStick, ExchangeApi } from 'ccex-api';
+import { CandleStick } from 'ccex-api';
 
 import { ChartData, ChartPoint } from '../../../../libs/d3/models';
 import { CcexApiService } from './ccex-api.service';
@@ -58,6 +58,7 @@ function getRange(resolution: ChartPeriodResolution): [number, number] {
   return [start, end];
 }
 
+// map candlestick => chart point
 function adaptCandlestick(candle: CandleStick): ChartPoint {
   return {
     x: candle.timestamp,
@@ -65,6 +66,7 @@ function adaptCandlestick(candle: CandleStick): ChartPoint {
   };
 }
 
+// update current chart data with new chart point
 function updateChartData(chartData: ChartData, point: ChartPoint): ChartData {
   if (!chartData || !chartData.length) {
     return [point];

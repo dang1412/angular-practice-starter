@@ -48,7 +48,10 @@ export class CcexPageComponent implements OnInit, OnDestroy {
   //   return this.ccexApiService.getExchange(this.exchange);
   // }
 
-  constructor(private ccexApiService: CcexApiService, private ccexApiChartService: CcexApiChartService) { }
+  constructor(
+    private ccexApiService: CcexApiService,
+    private ccexApiChartService: CcexApiChartService,
+  ) { }
 
   ngOnInit() {
     // this.orderbook$ = this.exchangeApi.orderbook$(this.pair);
