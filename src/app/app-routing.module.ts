@@ -4,7 +4,7 @@ import { Routes, PreloadAllModules, RouterModule } from '@angular/router';
 const appRoutes: Routes = [
   {
     path: '',
-    loadChildren: './feature-modules/feature-awesome/feature-awesome.module#FeatureAwesomeModule'
+    loadChildren: './feature-modules/main/main.module#MainModule'
   },
 ];
 
