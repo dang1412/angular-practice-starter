@@ -1,11 +1,11 @@
 # Angular Practice Starter
-This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+This project was originally generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.
 
 ## Features
  - Following official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
- - Good practice to import and use [Angular Material](https://angular.io/guide/styleguide).
+ - Best practice to import and use [Angular Material](https://angular.io/guide/styleguide).
  - Using username/password authentication.
- - Using [D3Js](https://d3js.org/), branch `feature/d3`.
+ - Using [D3Js](https://d3js.org/), branch [`feature/d3`](https://github.com/dang1412/angular-practice-starter/tree/feature/d3).
  - Using [Tradingview](https://www.tradingview.com/chart/) with official sample, branch [`feature/tradingview`](https://github.com/dang1412/angular-practice-starter/tree/feature/tradingview)
  - Using [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api) including Tradingview with realtime datafeed, branch [`feature/ccex-api`](https://github.com/dang1412/angular-practice-starter/tree/feature/ccex-api).
 
@@ -35,7 +35,7 @@ npm i --save @angular/material @angular/cdk @angular/animations
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Create module with pages and components
-Steps to generate one module with one page component (associated directly with a route), and one reusable component (used in page components with input, output)
+Steps to generate one module with one page component (associated directly with a route), and one reusable component (used in page components with input, output).
 
 ```
 ng g module feature-modules/main
