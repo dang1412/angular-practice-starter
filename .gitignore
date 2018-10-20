@@ -38,4 +38,8 @@ testem.log
 .DS_Store
 Thumbs.db
 
+<<<<<<< HEAD
 api-keys.ts
+=======
+.firebase
+>>>>>>> 84cf4b12406baeb05d2ce806c0a2a7ef01779e6a

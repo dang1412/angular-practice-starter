@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, concat } from 'rxjs';
 import { CandleStick } from 'ccex-api';
 
-import { ChartData, ChartPoint } from '../../../../libs/d3/models';
+import { ChartData, ChartPoint } from '../../d3js/core';
 import { CcexApiService } from './ccex-api.service';
 import { map, scan, catchError } from 'rxjs/operators';
 

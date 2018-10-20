@@ -4,11 +4,16 @@ import { Routes, PreloadAllModules, RouterModule } from '@angular/router';
 const appRoutes: Routes = [
   {
     path: '',
-    loadChildren: './feature-modules/feature-awesome/feature-awesome.module#FeatureAwesomeModule'
+    redirectTo: '/d3-js',
+    pathMatch: 'full'
   },
   {
     path: 'ccex-api',
     loadChildren: './feature-modules/ccex-api/ccex-api.module#CcexApiModule'
+  },
+  {
+    path: 'd3-js',
+    loadChildren: './feature-modules/d3js/d3js.module#D3jsModule'
   },
 ];
 
