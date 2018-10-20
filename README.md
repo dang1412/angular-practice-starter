@@ -5,27 +5,23 @@ This project was originally generated with [Angular CLI](https://github.com/angu
  - Following official [angular styles guide](https://angular.io/guide/styleguide) and some personal experiences.
  - Good practice to import and use [Angular Material](https://angular.io/guide/styleguide).
  - Using username/password authentication.
- - Using [Tradingview](https://www.tradingview.com/chart/) with naive official sample, branch [`feature/tradingview`](https://github.com/dang1412/angular-practice-starter/tree/feature/tradingview)
- - Using [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api) including Tradingview with realtime datafeed from exchanges, branch [`feature/ccex-api`](https://github.com/dang1412/angular-practice-starter/tree/feature/ccex-api).
+ - Using [D3Js](https://d3js.org/), branch `feature/d3`.
+ - Using [Tradingview](https://www.tradingview.com/chart/) with official sample, branch [`feature/tradingview`](https://github.com/dang1412/angular-practice-starter/tree/feature/tradingview)
+ - Using [Ccex-api](https://github.com/dang1412/ccex-api) (library that wrapping crypto exchanges api) including Tradingview with realtime datafeed, branch [`feature/ccex-api`](https://github.com/dang1412/angular-practice-starter/tree/feature/ccex-api).
 
  ## TODO
-  - Using [D3Js](https://d3js.org/), branch `feature/d3`.
   - Using Firebase authentication.
   - Using Google Drive storage.
   - Using AWS S3.
   - ... Please tell me more.
 
-## Overall structure
-
-<p align="center"><img src="assets/structure-diagram.png"></p>
-
-`AModule -> BModule` means that module A is imported inside module B declaration file (directly import or via lazy route definition).
-Inside a feature module we may have a single component or have the whole structure same to its parent app module.
-
-## Some explanations
+## Guides
 
 ### Add material
- - Create separate angular material import module file `src/shared/material.module.ts`
+```
+npm i --save @angular/material @angular/cdk @angular/animations
+```
+ - Create angular material import module file `src/shared/material.module.ts`
  - Include font style `src/index.html`
 ```
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -35,18 +31,88 @@ Inside a feature module we may have a single component or have the whole structu
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 ```
 
-## Code scaffolding
-
+## Code scalfoding
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Generate module, page components (associated directly with a route), presentation components (used in page components with input, output).
+## Create module with pages and components
+Steps to generate one module with one page component (associated directly with a route), and one reusable component (used in page components with input, output)
 
 ```
-ng g module feature-modules/feature-awesome
-ng g component feature-modules/feature-awesome/pages/my-page --skip-import
-ng g component feature-modules/feature-awesome/components/first-component --skip-import
-``` 
+ng g module feature-modules/main
+ng g component feature-modules/main/pages/my-page --skip-import
+ng g component feature-modules/main/components/my-view --skip-import
+```
 
+ - Create `feature-modules/main/pages/index.ts`
+```ts
+import { MyPageComponent } from './my-page/my-page.component';
+
+// used in module
+export const MainPages = [
+  MyPageComponent,
+];
+
+// used in routing module
+export {
+  MyPageComponent
+};
+```
+
+ - Create `feature-modules/main/components/index.ts`
+```ts
+import { MyViewComponent } from './my-view/my-view.component';
+
+export const MainComponents = [
+  MyViewComponent
+];
+```
+
+ - Routing module
+```ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { MyPageComponent } from './pages';
+
+const mainRoutes: Routes = [
+  { path: '', component: MyPageComponent },
+];
+
+@NgModule({
+  imports: [
+    RouterModule.forChild(mainRoutes),
+  ],
+  exports: [RouterModule],
+})
+export class MainRoutingModule { }
+```
+
+ - Declarations in main module
+```ts
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../../shared/shared.module';
+
+// components
+import { MainComponents } from './components';
+
+// pages
+import { MainPages } from './pages';
+
+// routing
+import { MainRoutingModule } from './main-routing.module';
+
+@NgModule({
+  imports: [
+    SharedModule,
+    MainRoutingModule
+  ],
+  declarations: [
+    ...MainPages,
+    ...MainComponents
+  ]
+})
+export class MainModule { }
+```
 ## Run, build and test
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
