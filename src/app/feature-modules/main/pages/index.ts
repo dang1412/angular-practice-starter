@@ -1,7 +1,7 @@
 import { MyPageComponent } from './my-page/my-page.component';
 
 // used in module
-export const FeatureAwesomePages = [
+export const MainPages = [
   MyPageComponent,
 ];
 

@@ -3,14 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MyPageComponent } from './pages';
 
-const featureAwesomeRoutes: Routes = [
+const mainRoutes: Routes = [
   { path: '', component: MyPageComponent },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(featureAwesomeRoutes),
+    RouterModule.forChild(mainRoutes),
   ],
   exports: [RouterModule],
 })
-export class FeatureAwesomeRoutingModule { }
+export class MainRoutingModule { }
