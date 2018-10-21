@@ -1,57 +1,3 @@
-// import { ScaleLinear, area, stack } from 'd3';
-
-// import { ChartPoint, ChartData } from '../models';
-// import { XYBaseChart } from './base-chart';
-
-// draw multiple stacked area chart, assume that all charts have the same x values
-// export class AreaChart extends XYBaseChart {
-//   getChartGenerator(
-//     multiData: ChartData[], xScale: ScaleLinear<number, number>, yScale: ScaleLinear<number, number>, chartHeight: number) {
-//     const chartNumber = multiData.length;
-//     const firstChart = multiData[0];
-//     const chartLength = firstChart.length;
-//     const stackData = [];
-//     const keys = [];
-
-//     for (let i = 0; i < chartLength; i++) {
-//       const object: {[prop: string]: number} = { x: firstChart[i].x };
-//       for (let j = 0; j < chartNumber; j ++) {
-//         const chartData = multiData[j];
-//         object['y' + j] = chartData[i].y;
-//         if (i === 0) {
-//           keys.push('y' + j);
-//         }
-//       }
-
-//       stackData.push(object);
-//     }
-
-//     /**
-//      * stackData
-//      * [
-//      *  {x: '', y0: '', y1: ''},
-//      *  {x: '', y0: '', y1: ''},
-//      * ]
-//      */
-
-//     const d3Stack = stack()
-//       .keys(keys);
-
-//     const series = d3Stack(stackData);
-//     console.log('==> series', series, keys);
-
-//     // recompute yScale domain
-//     // const yDomain =
-
-//     const chartArea = area<ChartPoint>()
-//       .x((d) => xScale(d.x))
-//       .y1((d) => yScale(d.y))
-//       .y0(chartHeight);
-
-//     return chartArea;
-//   }
-// }
-
 import { select, Selection, scaleLinear, ScaleLinear, extent, Area, area } from 'd3';
 import { interpolatePath } from 'd3-interpolate-path';
 
@@ -61,10 +7,8 @@ import { defaultOptions } from '../constants';
 export class AreaChart {
   private svgElement: any;
   private svg: Selection<any, {}, null, undefined>;
-  // private options: ChartOptions;
-  // private data: ChartData;
 
-  private getMargin(originMargin: number | [number, number, number, number]) {
+  private getMargin(originMargin: number | number[]) {
     const margin = typeof originMargin === 'number' ? [originMargin, originMargin, originMargin, originMargin] : originMargin;
 
     return {
